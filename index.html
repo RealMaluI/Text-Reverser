@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הפוך טקסט בעברית</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <h1>הפוך טקסט בעברית</h1>
+        <form name="form1">
+            <textarea id="Input" name="Input" rows="5" placeholder="הזן טקסט כאן..." oninput="reverseIt()"></textarea>
+            <textarea id="Output" name="Output" rows="5" placeholder="הטקסט ההפוך יופיע כאן..." readonly></textarea>
+
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" name="Numbers" checked onchange="reverseIt()">
+                    לא להפוך מספרים
+                </label>
+                <label>
+                    <input type="checkbox" name="Dashes" checked onchange="reverseIt()">
+                    לא להפוך נקודות וקווים (./:-)
+                </label>
+                <label>
+                    <input type="checkbox" name="English" checked onchange="reverseIt()">
+                    לא להפוך אותיות אנגליות
+                </label>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function reverseIt() {
+            const lineBreaks = "\n\r";
+            let keepStraight = "";
+            if (document.form1.Numbers.checked) keepStraight += "0123456789";
+            if (document.form1.Dashes.checked) keepStraight += "./:-";
+            if (document.form1.English.checked) keepStraight += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            const input = document.form1.Input.value;
+            let reversed = "";
+            let buffer = "";
+
+            for (let char of input) {
+                if (lineBreaks.includes(char)) {
+                    reversed = buffer + reversed;
+                    buffer = "";
+                    reversed = char + reversed;
+                } else if (keepStraight.includes(char)) {
+                    buffer += char;
+                } else {
+                    reversed = buffer + reversed;
+                    buffer = "";
+                    reversed = char + reversed;
+                }
+            }
+
+            reversed = buffer + reversed;
+            document.form1.Output.value = reversed;
+        }
+    </script>
+</body>
+</html>
